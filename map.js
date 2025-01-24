@@ -1,4 +1,3 @@
-<script>    
 am5.ready(function() {
 
   // Create root element
@@ -429,6 +428,3 @@ function getCountryFileName(id) {
 
 }); // end am5.ready()
 </script>
-
-<!-- HTML -->
-<div id="chartdiv"></div>
