@@ -1,5 +1,4 @@
 am5.ready(function() {
-
   // Create root element
   var root = am5.Root.new("globe-container");
 
@@ -427,6 +426,3 @@ function getCountryFileName(id) {
   chart.appear(1000, 100);
 
 }); // end am5.ready()
-
-<!-- HTML -->
-<div id="chartdiv"></div>
