@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meril Page</title>
+    <!-- Include amCharts Library -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: white;
+        }
+
+        .blue-header {
+            background-color: #5da4e5;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .blue-header select,
+        .blue-header input[type="text"],
+        .blue-header button {
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        .blue-header select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .blue-header input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 180px;
+        }
+
+        .blue-header button {
+            background-color: #ffc107;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .white-header {
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 80px;
+            margin-right: 10px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: black;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #5da4e5;
+        }
+
+        nav .current-page {
+            color: #5da4e5;
+            font-weight: bold;
+        }
+
+        .image-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .image-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .image-card h3 {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .dropdown-section {
+            padding: 15px;
+            background-color: #e7f1fb;
+            border: 1px solid #ccc;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .dropdown-section select {
+            padding: 10px;
+            font-size: 14px;
+            border: 2px solid #5da4e5;
+            border-radius: 5px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            width: 250px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .export-buttons button {
+            background-color: #5da4e5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .export-buttons button:hover {
+            background-color: #0073e6;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #5da4e5;
+            padding: 10px 0;
+            border-bottom: 2px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .tabs button {
+            background-color: #5da4e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-right: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .tabs button.active,
+        .tabs button:hover {
+            background-color: white;
+            color: #5da4e5;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #e8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table th,
+        table td {
+            padding: 10px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #2db9c3;
+            color: white;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        table td {
+            font-size: 13px;
+            color: #333;
+        }
+
+        table tbody tr:hover {
+            background-color: #cceef1;
+        }
+
+        .flag {
+            width: 20px;
+            height: 15px;
+            margin-right: 5px;
+            border-radius: 2px;
+            display: inline-block;
+            background-size: cover;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #chartdiv {
+            width: 100%;
+            height: 600px;
+            margin-top: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        #piechartdiv {
+           width: 90%; /* Adjust width to prevent overflow */
+           height: 400px; /* Increased height to give charts more space */
+           margin: 0 auto;
+           padding: 20px;
+           display: flex;
+           flex-direction: column; /* Stack charts vertically */
+           justify-content: space-between; /* Add spacing between the two charts */
+        }
+
+      #globe-container {
+           width: 100%;
+           height: 500px;
+           max-width: 100%;
+        }
+               .controls {
+            display: flex;
+            justify-content: flex-start; /* Align dropdowns to the left */
+            align-items: center;
+            gap: 20px;
+            margin: 20px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 14px;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            outline: none;
+            transition: border-color 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23333' d='M0 0l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 10px;
+            width: 200px;
+        }
+
+        select:hover {
+            border-color: #5da4e5;
+        }
+
+        select:focus {
+            border-color: #5da4e5;
+            box-shadow: 0 0 5px rgba(93, 164, 229, 0.5);
+        }
+
+        option {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Blue Header -->
+<div class="blue-header">
+    <select>
+        <option>SELECT LANGUAGE</option>
+        <option>English</option>
+        <option>French</option>
+        <option>Spanish</option>
+    </select>
+    <input type="text" placeholder="Search Here">
+    <button>🔍</button>
+</div>
+
+<!-- White Header -->
+<header class="white-header">
+    <div class="logo">
+        <img src="https://www.merillife.com/assets/images/home/new/meril_logo_new.png" alt="Meril Logo">
+    </div>
+    <nav>
+        <a href="https://www.merillife.com/about-us" target="_blank">About Us</a>
+        <a href="https://www.merillife.com/healthcare-professionals" target="_blank">Our Stakeholders</a>
+        <a href="https://www.merillife.com/medical-devices/orthopedic-implants" target="_blank">Products</a>
+        <a href="https://www.merillife.com/meril-academy" target="_blank">Meril Academy</a>
+        <a href="https://www.merillife.com/blog" target="_blank">Blogs</a>
+        <a href="https://merillife.zohorecruit.in/jobs/merilcareer?/about-us/careers)" target="_blank">Careers</a>
+        <a href="https://ifu.merillife.com/" target="_blank">e-IFU</a>
+        <span class="current-page">Our Presence</span>
+        <a href="https://www.merillife.com/contact-us" target="_blank">Contact Us</a>
+    </nav>
+</header>
+
+<!-- Image Section -->
+<div class="image-section">
+    <div class="image-card">
+        <img src="https://www.merillife.com/assets/images/usp/if3PcZ6wKjukhOrYWy2d.jpg" alt="Global Presence">
+        <h3>Global Presence</h3>
+    </div>
+    <div class="image-card">
+        <img src="https://www.merillife.com/assets/images/usp/dsB4W6FZ3JuMG1Obl05j.jpg" alt="Clinically Relevant">
+        <h3>Clinically Relevant</h3>
+    </div>
+    <div class="image-card">
+        <img src="https://www.merillife.com/assets/images/usp/4NO1aY8hvr3sIUW9pwbi.jpg" alt="State of the Art Medical Devices">
+        <h3>State of the Art Medical Devices</h3>
+    </div>
+    <div class="image-card">
+        <img src="https://www.merillife.com/assets/images/usp/qMCInDSOyxuXW73Pilbk.jpg" alt="Meril Academy">
+        <h3>Meril Academy</h3>
+    </div>
+    <div class="image-card">
+        <img src="https://www.merillife.com/assets/images/usp/wR71M3FnQJaIimzNj2cL.jpg" alt="World Class Manufacturing Facility">
+        <h3>World Class Manufacturing Facility</h3>
+    </div>
+    <div class="image-card">
+        <img src="https://www.merillife.com/assets/images/usp/P1yHpJlK7cturFnbQ5XT.jpg" alt="Diversified Manpower">
+        <h3>Diversified Manpower</h3>
+    </div>
+</div>
+
+<!-- Tabs Section -->
+<div class="tabs">
+    <button class="tab-button active" data-tab="table">Table</button>
+    <button class="tab-button" data-tab="graph">Graph</button>
+    <button class="tab-button" data-tab="map">Map</button>
+</div>
+
+<!-- Dropdown and Export Section -->
+<div id="dropdown-section" class="dropdown-section">
+    <select id="company-select">
+        <option value="mixed">Select Company</option>
+        <option value="healthcare">Meril Healthcare</option>
+        <option value="endo">Meril Endo-surgery</option>
+        <option value="life-sciences">Meril Life Sciences</option>
+    </select>
+    <select id="product-select">
+        <option>Select Product</option>
+    </select>
+    <select id="country-select">
+        <option>Select Country</option>
+        <option value="USA">USA</option>
+        <option value="Germany">Germany</option>
+        <option value="India">India</option>
+        <option value="Canada">Canada</option>
+        <option value="Japan">Japan</option>
+    </select>
+    <div class="export-buttons">
+        <button onclick="alert('Export to Excel coming soon!')">Export to Excel</button>
+        <button onclick="alert('Export to Word coming soon!')">Export to Word</button>
+    </div>
+</div>
+
+<!-- Tab Contents -->
+<div class="tab-content active" id="table">
+    <h2>Product Registration Status</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Sr.No.</th>
+                <th>Country</th>
+                <th>Product</th>
+                <th>Registration Status</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div>
+<div class="tab-content" id="graph">
+    <h2>Graph Content</h2>
+    <!-- Dropdowns for Continent and Company -->
+    <div class="controls">
+        <select id="continent-dropdown">
+            <option value="all">Select Continent</option>
+            <option value="Europe">Europe</option>
+            <option value="Africa">Africa</option>
+            <option value="North America">North America</option>
+            <option value="Asia">Asia</option>
+            <option value="Australia">Australia</option>
+            <option value="South America">South America</option>
+        </select>
+        <select id="company-dropdown">
+            <option value="all">Select Company</option>
+            <option value="Meril Healthcare">Meril Healthcare</option>
+            <option value="Meril Endo-surgery">Meril Endo-surgery</option>
+            <option value="Meril Life Sciences">Meril Life Sciences</option>
+        </select>
+    </div>
+    <!-- Chart container -->
+    <div id="chartdiv"></div>
+    <div class="container">
+  <h1>Graph Content</h1>
+  <div class="dropdown-section">
+    <select id="continent">
+      <option value="all">Select Continent</option>
+      <option value="Europe">Europe</option>
+      <option value="Africa">Africa</option>
+      <option value="North America">North America</option>
+      <option value="Asia">Asia</option>
+      <option value="Australia">Australia</option>
+      <option value="South America">South America</option>
+    </select>
+    <select id="company">
+      <option value="all">Select Company</option>
+      <option value="Meril Healthcare">Meril Healthcare</option>
+      <option value="Meril Life-Science">Meril Life-Science</option>
+      <option value="Meril Endo-Surgery">Meril Endo-Surgery</option>
+    </select>
+  </div>
+</div>
+<div id="piechartdiv"></div> <!-- Changed ID here -->
+</div>
+<div class="tab-content" id="map">
+    <h2>Map Content</h2>
+    <!-- Globe Visualization -->
+    <div id="globe-container"></div>
+</div>
+
+<script>
+    // ------------------------------------------
+    // Table Functionality
+    // ------------------------------------------
+    const products = {
+        mixed: [
+            "Destiknee™ Total Knee System",
+            "Opulent™ Total Knee System",
+            "Freedom® Total Knee System",
+            "Mitsu AB",
+            "Biomine",
+        ],
+        healthcare: [
+            "Destiknee™ Total Knee System",
+            "Opulent™ Total Knee System",
+            "Freedom® Total Knee System",
+        ],
+        endo: [
+            "Mitsu AB",
+            "Circular Stapler",
+        ],
+        "life-sciences": ["Biomine"],
+    };
+
+    const countries = ["USA", "Germany", "India", "Canada", "Japan"];
+    const companySelect = document.getElementById("company-select");
+    const productSelect = document.getElementById("product-select");
+    const countrySelect = document.getElementById("country-select");
+    const tableBody = document.getElementById("table-body");
+    const dropdownSection = document.getElementById("dropdown-section");
+
+    function updateTable(data) {
+        tableBody.innerHTML = data
+            .map(
+                ({ country, product, status }, index) =>
+                    `<tr>
+                        <td>${index + 1}</td>
+                        <td>
+                            <div style="display: flex; align-items: center;">
+                                <div class="flag" style="background-image: url('https://flagcdn.com/w40/${getCountryCode(
+                                    country
+                                )}.png'); background-size: cover;"></div>
+                                <span>${country}</span>
+                            </div>
+                        </td>
+                        <td>${product}</td>
+                        <td>${status}</td>
+                    </tr>`
+            )
+            .join("");
+    }
+
+    function getCountryCode(country) {
+        const countryCodes = {
+            USA: "us",
+            Germany: "de",
+            India: "in",
+            Canada: "ca",
+            Japan: "jp",
+        };
+        return countryCodes[country] || "xx";
+    }
+
+    function populateDropdown(select, items) {
+        select.innerHTML = `<option>Select Product</option>`;
+        items.forEach((item) => {
+            const option = document.createElement("option");
+            option.value = item;
+            option.textContent = item;
+            select.appendChild(option);
+        });
+    }
+
+    function generateData(products, selectedCountry, selectedProduct) {
+        const data = [];
+        products.forEach((product) => {
+            countries.forEach((country) => {
+                if (
+                    (!selectedCountry || selectedCountry === country) &&
+                    (!selectedProduct || selectedProduct === product)
+                ) {
+                    data.push({
+                        country,
+                        product,
+                        status: Math.random() > 0.5 ? "Reg." : "Not Reg.",
+                    });
+                }
+            });
+        });
+        return data;
+    }
+
+    function filterTable() {
+        const selectedCompany = companySelect.value;
+        const selectedProduct =
+            productSelect.value === "Select Product" ? null : productSelect.value;
+        const selectedCountry =
+            countrySelect.value === "Select Country" ? null : countrySelect.value;
+
+        const availableProducts = products[selectedCompany] || products.mixed;
+        const filteredData = generateData(
+            availableProducts,
+            selectedCountry,
+            selectedProduct
+        );
+
+        updateTable(filteredData);
+    }
+
+    companySelect.addEventListener("change", () => {
+        const selectedCompany = companySelect.value;
+        const availableProducts = products[selectedCompany] || products.mixed;
+        populateDropdown(productSelect, availableProducts);
+        filterTable();
+    });
+
+    productSelect.addEventListener("change", filterTable);
+    countrySelect.addEventListener("change", filterTable);
+
+    document.querySelectorAll(".tab-button").forEach((button) =>
+        button.addEventListener("click", () => {
+            document
+                .querySelectorAll(".tab-button")
+                .forEach((btn) => btn.classList.remove("active"));
+            button.classList.add("active");
+
+            const tabId = button.dataset.tab;
+            document
+                .querySelectorAll(".tab-content")
+                .forEach((tab) => tab.classList.remove("active"));
+            document.getElementById(tabId).classList.add("active");
+
+            // Show dropdowns and export buttons only on Table tab
+            if (tabId === "table") {
+                dropdownSection.classList.remove("hidden");
+            } else {
+                dropdownSection.classList.add("hidden");
+            }
+        })
+    );
+
+    // Initial Setup
+    populateDropdown(productSelect, products.mixed);
+    updateTable(generateData(products.mixed));
+</script>
+
+<script>
+        am5.ready(function () {
+            // Data for all continents and their respective countries
+            const companyData = {
+                "Meril Healthcare": {
+                    default: [
+                        { country: "Europe", value: 120 },
+                        { country: "Africa", value: 95 },
+                        { country: "North America", value: 140 },
+                        { country: "Asia", value: 110 },
+                        { country: "Australia", value: 90 },
+                        { country: "South America", value: 100 }
+                    ],
+                    Europe: [
+                        { country: "Germany", value: 60 },
+                        { country: "France", value: 55 },
+                        { country: "UK", value: 70 },
+                        { country: "Spain", value: 50 },
+                        { country: "Italy", value: 45 },
+                        { country: "Netherlands", value: 40 },
+                        { country: "Sweden", value: 30 },
+                        { country: "Norway", value: 25 },
+                        { country: "Denmark", value: 20 },
+                        { country: "Poland", value: 35 },
+                        { country: "Greece", value: 15 },
+                        { country: "Finland", value: 10 },
+                        { country: "Switzerland", value: 20 }
+                    ],
+                    Africa: [
+                        { country: "South Africa", value: 40 },
+                        { country: "Nigeria", value: 35 },
+                        { country: "Kenya", value: 20 },
+                        { country: "Egypt", value: 25 },
+                        { country: "Ethiopia", value: 30 },
+                        { country: "Algeria", value: 15 },
+                        { country: "Morocco", value: 10 },
+                        { country: "Sudan", value: 5 },
+                        { country: "Ghana", value: 12 },
+                        { country: "Cameroon", value: 14 },
+                        { country: "Ivory Coast", value: 18 },
+                        { country: "Tunisia", value: 8 },
+                        { country: "Libya", value: 6 }
+                    ],
+                    "North America": [
+                        { country: "USA", value: 95 },
+                        { country: "Canada", value: 60 },
+                        { country: "Mexico", value: 45 },
+                        { country: "Cuba", value: 30 },
+                        { country: "Honduras", value: 25 },
+                        { country: "Panama", value: 35 },
+                        { country: "Guatemala", value: 20 },
+                        { country: "El Salvador", value: 15 },
+                        { country: "Jamaica", value: 10 },
+                        { country: "Haiti", value: 12 },
+                        { country: "Costa Rica", value: 20 },
+                        { country: "Belize", value: 8 },
+                        { country: "Bahamas", value: 6 }
+                    ],
+                    Asia: [
+                        { country: "China", value: 80 },
+                        { country: "India", value: 75 },
+                        { country: "Japan", value: 85 },
+                        { country: "South Korea", value: 70 },
+                        { country: "Thailand", value: 60 },
+                        { country: "Vietnam", value: 50 },
+                        { country: "Singapore", value: 45 },
+                        { country: "Malaysia", value: 40 },
+                        { country: "Philippines", value: 30 },
+                        { country: "Bangladesh", value: 25 },
+                        { country: "Pakistan", value: 20 },
+                        { country: "Sri Lanka", value: 15 },
+                        { country: "Indonesia", value: 35 }
+                    ],
+                    Australia: [
+                        { country: "Australia", value: 110 },
+                        { country: "New Zealand", value: 90 },
+                        { country: "Fiji", value: 45 },
+                        { country: "Papua New Guinea", value: 30 },
+                        { country: "Samoa", value: 25 },
+                        { country: "Vanuatu", value: 20 },
+                        { country: "Solomon Islands", value: 15 },
+                        { country: "Kiribati", value: 10 }
+                    ],
+                    "South America": [
+                        { country: "Brazil", value: 95 },
+                        { country: "Argentina", value: 80 },
+                        { country: "Chile", value: 60 },
+                        { country: "Colombia", value: 50 },
+                        { country: "Peru", value: 40 },
+                        { country: "Venezuela", value: 35 },
+                        { country: "Ecuador", value: 30 },
+                        { country: "Paraguay", value: 25 },
+                        { country: "Uruguay", value: 20 },
+                        { country: "Bolivia", value: 15 },
+                        { country: "Guyana", value: 10 },
+                        { country: "Suriname", value: 12 }
+                    ]
+                }
+            };
+
+            // Create root element
+            var root = am5.Root.new("chartdiv");
+
+            // Set themes
+            root.setThemes([am5themes_Animated.new(root)]);
+
+            // Create chart
+            var chart = root.container.children.push(
+                am5xy.XYChart.new(root, {
+                    panX: true,
+                    panY: true,
+                    wheelX: "panX",
+                    wheelY: "zoomX",
+                    pinchZoomX: true
+                })
+            );
+
+            // Add cursor
+            var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+            cursor.lineY.set("visible", false);
+
+            // Create X-axis (categories)
+            var xAxis = chart.xAxes.push(
+                am5xy.CategoryAxis.new(root, {
+                    categoryField: "country",
+                    renderer: am5xy.AxisRendererX.new(root, {
+                        minGridDistance: 30,
+                        cellStartLocation: 0.2,
+                        cellEndLocation: 0.8
+                    }),
+                    tooltip: am5.Tooltip.new(root, {})
+                })
+            );
+
+            // Create Y-axis (values)
+            var yAxis = chart.yAxes.push(
+                am5xy.ValueAxis.new(root, {
+                    renderer: am5xy.AxisRendererY.new(root, {})
+                })
+            );
+
+            // Create series
+            var series = chart.series.push(
+                am5xy.ColumnSeries.new(root, {
+                    name: "Series 1",
+                    xAxis: xAxis,
+                    yAxis: yAxis,
+                    valueYField: "value",
+                    categoryXField: "country",
+                    tooltip: am5.Tooltip.new(root, {
+                        labelText: "{valueY} products registered"
+                    }) // Tooltip showing custom message
+                })
+            );
+
+            // Style for columns
+            series.columns.template.setAll({
+                cornerRadiusTL: 5,
+                cornerRadiusTR: 5,
+                width: am5.percent(80),
+                tooltipY: 0
+            });
+
+            series.columns.template.adapters.add("fill", function (fill, target) {
+                return chart.get("colors").getIndex(series.columns.indexOf(target));
+            });
+
+            series.columns.template.adapters.add("stroke", function (stroke, target) {
+                return chart.get("colors").getIndex(series.columns.indexOf(target));
+            });
+
+            // Dropdown Elements
+            const continentDropdown = document.getElementById("continent-dropdown");
+            const companyDropdown = document.getElementById("company-dropdown");
+
+            // Function to update chart based on selected continent and company
+            function updateChart(selectedContinent, selectedCompany) {
+                if (!selectedCompany || selectedCompany === "all") {
+                    selectedCompany = "Meril Healthcare";
+                }
+
+                const companyDataset = companyData[selectedCompany];
+
+                let data;
+                if (selectedContinent === "all") {
+                    data = companyDataset.default;
+                } else {
+                    data = companyDataset[selectedContinent] || [];
+                }
+
+                xAxis.data.setAll(data);
+                series.data.setAll(data);
+            }
+
+            // Handle dropdown changes
+            continentDropdown.addEventListener("change", function () {
+                const selectedContinent = continentDropdown.value;
+                const selectedCompany = companyDropdown.value;
+                updateChart(selectedContinent, selectedCompany);
+            });
+
+            companyDropdown.addEventListener("change", function () {
+                const selectedContinent = continentDropdown.value;
+                const selectedCompany = companyDropdown.value;
+                updateChart(selectedContinent, selectedCompany);
+            });
+
+            // Set default data (All Continents & Default Company)
+            updateChart("all", "Meril Healthcare");
+
+            // Animate chart on load
+            series.appear(1000);
+            chart.appear(1000, 100);
+        });
+    </script>
+    
+    <script>
+am5.ready(function () {
+  // Create root
+  var root = am5.Root.new("piechartdiv");
+  root.setThemes([am5themes_Animated.new(root)]);
+// Create a container for both pie charts with horizontal layout
+  var container = root.container.children.push(
+    am5.Container.new(root, {
+      width: am5.p100,
+      height: am5.p100,
+      layout: root.horizontalLayout, // Align charts horizontally
+      paddingTop: 20,
+      paddingBottom: 20,
+      paddingLeft: 40, // Added space on the left
+      paddingRight: 40, // Added space on the right
+      spacing: 80, // Space between the two charts
+    })
+  );
+
+  // First Pie Chart: Continents or Countries
+  var chart = container.children.push(
+    am5percent.PieChart.new(root, {
+      tooltip: am5.Tooltip.new(root, {}),
+      width: am5.percent(60), // Allocate 60% of container width
+      height: am5.percent(100),
+    })
+  );
+
+  var series = chart.series.push(
+    am5percent.PieSeries.new(root, {
+      valueField: "value",
+      categoryField: "category",
+    })
+  );
+
+  // Adjust labels for the first chart to prevent overlapping
+  series.labels.template.setAll({
+    textType: "circular", // Align text around the circle
+    radius: 0, // Push labels outside the pie chart
+    maxWidth: 140, // Limit label width
+    oversizedBehavior: "wrap", // Wrap long text
+    fontSize: "12px", // Adjust font size for better readability
+    textAlign: "middle", // Center-align text
+  });
+  // Enable and style straight leader lines (ticks) for the first chart
+  series.ticks.template.setAll({
+    stroke: am5.color(0x000000), // Dark gray color for lines
+    strokeWidth: 2, // Line thickness
+    strokeDasharray: [], // Solid line
+    visible: true, // Ensure the ticks are visible
+    length: 20, // Length of the straight lines
+  });
+
+  series.slices.template.set("toggleKey", "none");
+
+  // Second Pie Chart: Companies
+  var subChart = container.children.push(
+    am5percent.PieChart.new(root, {
+      tooltip: am5.Tooltip.new(root, {}),
+      width: am5.percent(40), // Allocate 40% of container width
+      height: am5.percent(70), // Make the second pie chart smaller
+    })
+  );
+
+  var subSeries = subChart.series.push(
+    am5percent.PieSeries.new(root, {
+      valueField: "value",
+      categoryField: "category",
+    })
+  );
+
+  // Adjust labels for the second chart to prevent overlapping
+  subSeries.labels.template.setAll({
+    textType: "circular", // Align text around the circle
+    radius: -10, // Push labels further outside the pie chart
+    maxWidth: 100, // Limit label width for smaller chart
+    oversizedBehavior: "wrap", // Wrap long text
+    fontSize: "11px", // Adjust font size for readability
+    textAlign: "middle", // Center-align text
+  });
+  
+  // Enable and style straight leader lines (ticks) for the second chart
+  subSeries.ticks.template.setAll({
+    stroke: am5.color(0x000000), // Dark gray color for lines
+    strokeWidth: 2, // Line thickness
+    strokeDasharray: [], // Solid line
+    visible: true, // Ensure the ticks are visible
+    length: 20, // Length of the straight lines
+  });
+
+  // Data
+  var data = {
+    all: {
+    continents: [
+      { category: "Europe", value: 15000, companies: { "Meril Healthcare": 5000, "Meril Life-Science": 5000, "Meril Endo-Surgery": 5000 } },
+      { category: "Africa", value: 12000, companies: { "Meril Healthcare": 4000, "Meril Life-Science": 4000, "Meril Endo-Surgery": 4000 } },
+      { category: "North America", value: 18000, companies: { "Meril Healthcare": 6000, "Meril Life-Science": 6000, "Meril Endo-Surgery": 6000 } },
+      { category: "Asia", value: 22000, companies: { "Meril Healthcare": 8000, "Meril Life-Science": 7000, "Meril Endo-Surgery": 6000 } },
+      { category: "Australia", value: 8000, companies: { "Meril Healthcare": 3000, "Meril Life-Science": 3000, "Meril Endo-Surgery": 2000 } },
+      { category: "South America", value: 14000, companies: { "Meril Healthcare": 5000, "Meril Life-Science": 5000, "Meril Endo-Surgery": 4000 } },
+    ],
+  },
+  Europe: [
+    { category: "Germany", value: 2000, companies: { "Meril Healthcare": 800, "Meril Life-Science": 600, "Meril Endo-Surgery": 600 } },
+    { category: "France", value: 1800, companies: { "Meril Healthcare": 700, "Meril Life-Science": 600, "Meril Endo-Surgery": 500 } },
+    { category: "Italy", value: 1500, companies: { "Meril Healthcare": 600, "Meril Life-Science": 500, "Meril Endo-Surgery": 400 } },
+    { category: "Spain", value: 1400, companies: { "Meril Healthcare": 500, "Meril Life-Science": 500, "Meril Endo-Surgery": 400 } },
+    { category: "Netherlands", value: 1200, companies: { "Meril Healthcare": 500, "Meril Life-Science": 400, "Meril Endo-Surgery": 300 } },
+    { category: "Poland", value: 1100, companies: { "Meril Healthcare": 400, "Meril Life-Science": 400, "Meril Endo-Surgery": 300 } },
+    { category: "Sweden", value: 1000, companies: { "Meril Healthcare": 400, "Meril Life-Science": 300, "Meril Endo-Surgery": 300 } },
+    { category: "Norway", value: 900, companies: { "Meril Healthcare": 350, "Meril Life-Science": 300, "Meril Endo-Surgery": 250 } },
+    { category: "Belgium", value: 850, companies: { "Meril Healthcare": 300, "Meril Life-Science": 300, "Meril Endo-Surgery": 250 } },
+    { category: "Austria", value: 800, companies: { "Meril Healthcare": 300, "Meril Life-Science": 250, "Meril Endo-Surgery": 250 } },
+    { category: "Switzerland", value: 750, companies: { "Meril Healthcare": 250, "Meril Life-Science": 250, "Meril Endo-Surgery": 250 } },
+    { category: "Portugal", value: 700, companies: { "Meril Healthcare": 250, "Meril Life-Science": 250, "Meril Endo-Surgery": 200 } },
+  ],
+  Africa: [
+    { category: "Nigeria", value: 2000, companies: { "Meril Healthcare": 700, "Meril Life-Science": 700, "Meril Endo-Surgery": 600 } },
+    { category: "South Africa", value: 1800, companies: { "Meril Healthcare": 600, "Meril Life-Science": 600, "Meril Endo-Surgery": 600 } },
+    { category: "Egypt", value: 1500, companies: { "Meril Healthcare": 500, "Meril Life-Science": 500, "Meril Endo-Surgery": 500 } },
+    { category: "Kenya", value: 1400, companies: { "Meril Healthcare": 500, "Meril Life-Science": 500, "Meril Endo-Surgery": 400 } },
+    { category: "Ethiopia", value: 1300, companies: { "Meril Healthcare": 400, "Meril Life-Science": 450, "Meril Endo-Surgery": 450 } },
+    { category: "Ghana", value: 1200, companies: { "Meril Healthcare": 400, "Meril Life-Science": 400, "Meril Endo-Surgery": 400 } },
+    { category: "Morocco", value: 1100, companies: { "Meril Healthcare": 350, "Meril Life-Science": 400, "Meril Endo-Surgery": 350 } },
+    { category: "Tanzania", value: 1000, companies: { "Meril Healthcare": 350, "Meril Life-Science": 350, "Meril Endo-Surgery": 300 } },
+    { category: "Uganda", value: 900, companies: { "Meril Healthcare": 300, "Meril Life-Science": 300, "Meril Endo-Surgery": 300 } },
+    { category: "Algeria", value: 850, companies: { "Meril Healthcare": 300, "Meril Life-Science": 300, "Meril Endo-Surgery": 250 } },
+    { category: "Sudan", value: 800, companies: { "Meril Healthcare": 250, "Meril Life-Science": 300, "Meril Endo-Surgery": 250 } },
+    { category: "Ivory Coast", value: 750, companies: { "Meril Healthcare": 250, "Meril Life-Science": 250, "Meril Endo-Surgery": 250 } },
+  ],
+  NorthAmerica: [
+    { category: "USA", value: 8000, companies: { "Meril Healthcare": 3000, "Meril Life-Science": 2500, "Meril Endo-Surgery": 2500 } },
+    { category: "Canada", value: 5000, companies: { "Meril Healthcare": 2000, "Meril Life-Science": 1500, "Meril Endo-Surgery": 1500 } },
+    { category: "Mexico", value: 5000, companies: { "Meril Healthcare": 1500, "Meril Life-Science": 1500, "Meril Endo-Surgery": 2000 } },
+  ],
+  SouthAmerica: [
+    { category: "Brazil", value: 6000, companies: { "Meril Healthcare": 2000, "Meril Life-Science": 2000, "Meril Endo-Surgery": 2000 } },
+    { category: "Argentina", value: 5000, companies: { "Meril Healthcare": 1500, "Meril Life-Science": 1500, "Meril Endo-Surgery": 2000 } },
+    { category: "Chile", value: 4000, companies: { "Meril Healthcare": 1500, "Meril Life-Science": 1500, "Meril Endo-Surgery": 1000 } },
+    { category: "Colombia", value: 3000, companies: { "Meril Healthcare": 1000, "Meril Life-Science": 1000, "Meril Endo-Surgery": 1000 } },
+  ],
+  Asia: [
+    { category: "India", value: 8000, companies: { "Meril Healthcare": 3000, "Meril Life-Science": 3000, "Meril Endo-Surgery": 2000 } },
+    { category: "China", value: 7000, companies: { "Meril Healthcare": 2500, "Meril Life-Science": 2500, "Meril Endo-Surgery": 2000 } },
+    { category: "Japan", value: 6000, companies: { "Meril Healthcare": 2000, "Meril Life-Science": 2000, "Meril Endo-Surgery": 2000 } },
+  ],
+  Australia: [
+    { category: "Australia", value: 8000, companies: { "Meril Healthcare": 3000, "Meril Life-Science": 3000, "Meril Endo-Surgery": 2000 } },
+    ],
+  };
+
+  var continentSelect = document.getElementById("continent");
+  var companySelect = document.getElementById("company");
+
+  // Function to animate the charts
+  function animateChart(chart) {
+    chart.series.each((series) => {
+      series.appear(1000, 100); // Smooth circular animation
+    });
+  }
+
+  // Function to update charts
+  function updateCharts() {
+    var selectedContinent = continentSelect.value;
+    var selectedCompany = companySelect.value;
+
+    // First Chart: Update based on the selected company
+    if (selectedCompany === "all") {
+      if (selectedContinent === "all") {
+        series.data.setAll(data.all.continents);
+      } else {
+        series.data.setAll(data[selectedContinent] || []);
+      }
+    } else {
+      if (selectedContinent === "all") {
+        // Filter continents for the selected company
+        var filteredContinents = data.all.continents.map((continent) => ({
+          category: continent.category,
+          value: continent.companies[selectedCompany] || 0,
+        }));
+        series.data.setAll(filteredContinents);
+      } else {
+        // Filter countries for the selected company
+        var filteredCountries = (data[selectedContinent] || []).map((country) => ({
+          category: country.category,
+          value: country.companies[selectedCompany] || 0,
+        }));
+        series.data.setAll(filteredCountries);
+      }
+    }
+
+    // Second Chart: Update based on the selected company
+    if (selectedCompany === "all") {
+      if (selectedContinent === "all") {
+        var globalCompanies = {};
+        data.all.continents.forEach((continent) => {
+          Object.entries(continent.companies).forEach(([company, value]) => {
+            globalCompanies[company] = (globalCompanies[company] || 0) + value;
+          });
+        });
+        subSeries.data.setAll(
+          Object.entries(globalCompanies).map(([category, value]) => ({ category, value }))
+        );
+      } else {
+        var continentCompanies = {};
+        (data[selectedContinent] || []).forEach((country) => {
+          Object.entries(country.companies).forEach(([company, value]) => {
+            continentCompanies[company] = (continentCompanies[company] || 0) + value;
+          });
+        });
+        subSeries.data.setAll(
+          Object.entries(continentCompanies).map(([category, value]) => ({ category, value }))
+        );
+      }
+    } else {
+      subSeries.data.setAll([{ category: selectedCompany, value: 100 }]);
+    }
+
+    // Trigger animations
+    animateChart(chart);
+    animateChart(subChart);
+  }
+
+  continentSelect.addEventListener("change", updateCharts);
+  companySelect.addEventListener("change", updateCharts);
+
+  // Initial setup
+  series.data.setAll(data.all.continents);
+  updateCharts();
+});
+</script>
+    
+<script>    
+am5.ready(function() {
+
+  // Create root element
+  var root = am5.Root.new("globe-container");
+
+  // Set themes
+  root.setThemes([
+    am5themes_Animated.new(root)
+  ]);
+
+  // Create the map chart
+  var chart = root.container.children.push(am5map.MapChart.new(root, {
+    panX: "rotateX",
+    panY: "rotateY",
+    projection: am5map.geoOrthographic(),
+    paddingBottom: 20,
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20
+  }));
+
+// Define the auto-rotation animation
+let autoRotate;
+
+function startAutoRotation() {
+    autoRotate = chart.animate({
+        key: "rotationX",
+        to: chart.get("rotationX") + 360, // Continue rotation from current position
+        duration: 10000, // 30 seconds for a full rotation
+        loops: Infinity, // Infinite loops
+        easing: am5.ease.linear // Smooth, constant speed
+    });
+}
+
+function stopAutoRotation() {
+    if (autoRotate) {
+        autoRotate.stop(); // Stop the animation
+        autoRotate = null;
+    }
+}
+
+// Attach mouse events to control auto-rotation
+chart.chartContainer.events.on("pointerover", function() {
+    stopAutoRotation(); // Stop rotation when the mouse is over the globe
+});
+
+chart.chartContainer.events.on("pointerout", function() {
+    startAutoRotation(); // Start rotation when the mouse leaves the globe
+});
+
+// Start auto-rotation by default
+startAutoRotation();
+
+  // Enable globe rotation on drag
+  chart.set("wheelX", "rotateX");
+  chart.set("wheelY", "rotateY");
+  chart.set("panBehavior", "rotateLongLat");
+  
+  // Create main polygon series for countries
+var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+    geoJSON: am5geodata_worldLow
+}));
+
+var backgroundSeries = chart.series.unshift(
+        am5map.MapPolygonSeries.new(root, {})
+      );
+
+      backgroundSeries.mapPolygons.template.setAll({
+        fill: am5.color(0x5d97e7), // Light blue ocean color
+        stroke: am5.color(0x5d97e7),
+      });
+
+      backgroundSeries.data.push({
+        geometry: am5map.getGeoRectangle(90, 180, -90, -180),
+      });
+
+  // Add lighting effect
+  chart.seriesContainer.set("background", am5.Rectangle.new(root, {
+    fill: am5.color(0x4682B4),
+    fillOpacity: 1
+  }));
+  chart.seriesContainer.set("shadow", am5.Rectangle.new(root, {
+    fill: am5.color(0xcccccc),
+    fillOpacity: 0.4,
+    blur: 10,
+    dx: 5,
+    dy: 5
+  }));
+
+  // Country-specific product registration data
+  var countryData = {
+   AD: { name: "Andorra", registered: 15, underRegistration: 5, flag: "https://flagcdn.com/w40/ad.png" },
+    AE: { name: "United Arab Emirates", registered: 120, underRegistration: 25, flag: "https://flagcdn.com/w40/ae.png" },
+    AF: { name: "Afghanistan", registered: 80, underRegistration: 20, flag: "https://flagcdn.com/w40/af.png" },
+    AG: { name: "Antigua and Barbuda", registered: 35, underRegistration: 10, flag: "https://flagcdn.com/w40/ag.png" },
+    AI: { name: "Anguilla", registered: 10, underRegistration: 2, flag: "https://flagcdn.com/w40/ai.png" },
+    AL: { name: "Albania", registered: 50, underRegistration: 15, flag: "https://flagcdn.com/w40/al.png" },
+    AM: { name: "Armenia", registered: 60, underRegistration: 20, flag: "https://flagcdn.com/w40/am.png" },
+    AO: { name: "Angola", registered: 70, underRegistration: 30, flag: "https://flagcdn.com/w40/ao.png" },
+    AR: { name: "Argentina", registered: 500, underRegistration: 100, flag: "https://flagcdn.com/w40/ar.png" },
+    AT: { name: "Austria", registered: 300, underRegistration: 50, flag: "https://flagcdn.com/w40/at.png" },
+    AU: { name: "Australia", registered: 700, underRegistration: 150, flag: "https://flagcdn.com/w40/au.png" },
+    AZ: { name: "Azerbaijan", registered: 90, underRegistration: 20, flag: "https://flagcdn.com/w40/az.png" },
+    BA: { name: "Bosnia and Herzegovina", registered: 85, underRegistration: 25, flag: "https://flagcdn.com/w40/ba.png" },
+    BB: { name: "Barbados", registered: 40, underRegistration: 10, flag: "https://flagcdn.com/w40/bb.png" },
+    BD: { name: "Bangladesh", registered: 80, underRegistration: 200, flag: "https://flagcdn.com/w40/bd.png" },
+    BE: { name: "Belgium", registered: 450, underRegistration: 70, flag: "https://flagcdn.com/w40/be.png" },
+    BF: { name: "Burkina Faso", registered: 60, underRegistration: 15, flag: "https://flagcdn.com/w40/bf.png" },
+    BG: { name: "Bulgaria", registered: 150, underRegistration: 40, flag: "https://flagcdn.com/w40/bg.png" },
+    BH: { name: "Bahrain", registered: 90, underRegistration: 25, flag: "https://flagcdn.com/w40/bh.png" },
+    BI: { name: "Burundi", registered: 50, underRegistration: 10, flag: "https://flagcdn.com/w40/bi.png" },
+    BJ: { name: "Benin", registered: 65, underRegistration: 20, flag: "https://flagcdn.com/w40/bj.png" },
+    BN: { name: "Brunei", registered: 55, underRegistration: 15, flag: "https://flagcdn.com/w40/bn.png" },
+    BO: { name: "Bolivia", registered: 95, underRegistration: 25, flag: "https://flagcdn.com/w40/bo.png" },
+    BR: { name: "Brazil", registered: 150, underRegistration: 300, flag: "https://flagcdn.com/w40/br.png" },
+    BS: { name: "Bahamas", registered: 30, underRegistration: 10, flag: "https://flagcdn.com/w40/bs.png" },
+    BT: { name: "Bhutan", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/bt.png" },
+    BW: { name: "Botswana", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/bw.png" },
+    BY: { name: "Belarus", registered: 200, underRegistration: 40, flag: "https://flagcdn.com/w40/by.png" },
+    BZ: { name: "Belize", registered: 35, underRegistration: 10, flag: "https://flagcdn.com/w40/bz.png" },
+    CA: { name: "Canada", registered: 1300, underRegistration: 250, flag: "https://flagcdn.com/w40/ca.png" },
+    CD: { name: "Democratic Republic of the Congo", registered: 110, underRegistration: 30, flag: "https://flagcdn.com/w40/cd.png" },
+    CF: { name: "Central African Republic", registered: 40, underRegistration: 15, flag: "https://flagcdn.com/w40/cf.png" },
+    CG: { name: "Republic of the Congo", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/cg.png" },
+    CH: { name: "Switzerland", registered: 60, underRegistration: 100, flag: "https://flagcdn.com/w40/ch.png" },
+    CI: { name: "Ivory Coast", registered: 120, underRegistration: 35, flag: "https://flagcdn.com/w40/ci.png" },
+    CL: { name: "Chile", registered: 400, underRegistration: 80, flag: "https://flagcdn.com/w40/cl.png" },
+    CM: { name: "Cameroon", registered: 100, underRegistration: 25, flag: "https://flagcdn.com/w40/cm.png" },
+    CN: { name: "China", registered: 50, underRegistration: 800, flag: "https://flagcdn.com/w40/cn.png" },
+    CO: { name: "Colombia", registered: 700, underRegistration: 150, flag: "https://flagcdn.com/w40/co.png" },
+    CR: { name: "Costa Rica", registered: 180, underRegistration: 50, flag: "https://flagcdn.com/w40/cr.png" },
+    CU: { name: "Cuba", registered: 95, underRegistration: 25, flag: "https://flagcdn.com/w40/cu.png" },
+    CV: { name: "Cape Verde", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/cv.png" },
+    CY: { name: "Cyprus", registered: 150, underRegistration: 40, flag: "https://flagcdn.com/w40/cy.png" },
+    CZ: { name: "Czech Republic", registered: 500, underRegistration: 90, flag: "https://flagcdn.com/w40/cz.png" },
+    DE: { name: "Germany", registered: 200, underRegistration: 300, flag: "https://flagcdn.com/w40/de.png" },
+    DJ: { name: "Djibouti", registered: 25, underRegistration: 5, flag: "https://flagcdn.com/w40/dj.png" },
+    DK: { name: "Denmark", registered: 400, underRegistration: 70, flag: "https://flagcdn.com/w40/dk.png" },
+    DM: { name: "Dominica", registered: 15, underRegistration: 5, flag: "https://flagcdn.com/w40/dm.png" },
+    DO: { name: "Dominican Republic", registered: 300, underRegistration: 60, flag: "https://flagcdn.com/w40/do.png" },
+    DZ: { name: "Algeria", registered: 400, underRegistration: 100, flag: "https://flagcdn.com/w40/dz.png" },
+    EC: { name: "Ecuador", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/ec.png" },
+    EE: { name: "Estonia", registered: 150, underRegistration: 30, flag: "https://flagcdn.com/w40/ee.png" },
+    EG: { name: "Egypt", registered: 120, underRegistration: 250, flag: "https://flagcdn.com/w40/eg.png" },
+    ER: { name: "Eritrea", registered: 50, underRegistration: 10, flag: "https://flagcdn.com/w40/er.png" },
+    ES: { name: "Spain", registered: 140, underRegistration: 200, flag: "https://flagcdn.com/w40/es.png" },
+    ET: { name: "Ethiopia", registered: 700, underRegistration: 150, flag: "https://flagcdn.com/w40/et.png" },
+    FI: { name: "Finland", registered: 400, underRegistration: 80, flag: "https://flagcdn.com/w40/fi.png" },
+    FJ: { name: "Fiji", registered: 50, underRegistration: 20, flag: "https://flagcdn.com/w40/fj.png" },
+    FM: { name: "Micronesia", registered: 30, underRegistration: 10, flag: "https://flagcdn.com/w40/fm.png" },
+    FR: { name: "France", registered: 1800, underRegistration: 300, flag: "https://flagcdn.com/w40/fr.png" },
+    GA: { name: "Gabon", registered: 50, underRegistration: 15, flag: "https://flagcdn.com/w40/ga.png" },
+    GB: { name: "United Kingdom", registered: 2200, underRegistration: 400, flag: "https://flagcdn.com/w40/gb.png" },
+    GD: { name: "Grenada", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/gd.png" },
+    GE: { name: "Georgia", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/ge.png" },
+    GH: { name: "Ghana", registered: 300, underRegistration: 80, flag: "https://flagcdn.com/w40/gh.png" },
+    GM: { name: "Gambia", registered: 40, underRegistration: 10, flag: "https://flagcdn.com/w40/gm.png" },
+    GN: { name: "Guinea", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/gn.png" },
+    GQ: { name: "Equatorial Guinea", registered: 50, underRegistration: 10, flag: "https://flagcdn.com/w40/gq.png" },
+    GR: { name: "Greece", registered: 500, underRegistration: 100, flag: "https://flagcdn.com/w40/gr.png" },
+    GT: { name: "Guatemala", registered: 200, underRegistration: 50, flag: "https://flagcdn.com/w40/gt.png" },
+    GW: { name: "Guinea-Bissau", registered: 30, underRegistration: 5, flag: "https://flagcdn.com/w40/gw.png" },
+    GY: { name: "Guyana", registered: 40, underRegistration: 10, flag: "https://flagcdn.com/w40/gy.png" },
+    HN: { name: "Honduras", registered: 150, underRegistration: 40, flag: "https://flagcdn.com/w40/hn.png" },
+    HR: { name: "Croatia", registered: 300, underRegistration: 60, flag: "https://flagcdn.com/w40/hr.png" },
+    HT: { name: "Haiti", registered: 100, underRegistration: 30, flag: "https://flagcdn.com/w40/ht.png" },
+    HU: { name: "Hungary", registered: 450, underRegistration: 90, flag: "https://flagcdn.com/w40/hu.png" },
+    ID: { name: "Indonesia", registered: 180, underRegistration: 400, flag: "https://flagcdn.com/w40/id.png" },
+    IE: { name: "Ireland", registered: 600, underRegistration: 120, flag: "https://flagcdn.com/w40/ie.png" },
+    IL: { name: "Israel", registered: 700, underRegistration: 150, flag: "https://flagcdn.com/w40/il.png" },
+    IN: { name: "India", registered: 1700, underRegistration: 600, flag: "https://flagcdn.com/w40/in.png" },
+    IQ: { name: "Iraq", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/iq.png" },
+    IR: { name: "Iran", registered: 500, underRegistration: 120, flag: "https://flagcdn.com/w40/ir.png" },
+    IS: { name: "Iceland", registered: 50, underRegistration: 10, flag: "https://flagcdn.com/w40/is.png" },
+    IT: { name: "Italy", registered: 200, underRegistration: 300, flag: "https://flagcdn.com/w40/it.png" },
+    JM: { name: "Jamaica", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/jm.png" },
+    JO: { name: "Jordan", registered: 150, underRegistration: 40, flag: "https://flagcdn.com/w40/jo.png" },
+    JP: { name: "Japan", registered: 85, underRegistration: 350, flag: "https://flagcdn.com/w40/jp.png" },
+    KE: { name: "Kenya", registered: 800, underRegistration: 200, flag: "https://flagcdn.com/w40/ke.png" },
+    KG: { name: "Kyrgyzstan", registered: 90, underRegistration: 20, flag: "https://flagcdn.com/w40/kg.png" },
+    KH: { name: "Cambodia", registered: 150, underRegistration: 40, flag: "https://flagcdn.com/w40/kh.png" },
+    KI: { name: "Kiribati", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/ki.png" },
+    KM: { name: "Comoros", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/km.png" },
+    KN: { name: "Saint Kitts and Nevis", registered: 10, underRegistration: 2, flag: "https://flagcdn.com/w40/kn.png" },
+    KP: { name: "North Korea", registered: 50, underRegistration: 10, flag: "https://flagcdn.com/w40/kp.png" },
+    KR: { name: "South Korea", registered: 90, underRegistration: 200, flag: "https://flagcdn.com/w40/kr.png" },
+    KW: { name: "Kuwait", registered: 150, underRegistration: 30, flag: "https://flagcdn.com/w40/kw.png" },
+    KZ: { name: "Kazakhstan", registered: 500, underRegistration: 100, flag: "https://flagcdn.com/w40/kz.png" },
+    LA: { name: "Laos", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/la.png" },
+    LB: { name: "Lebanon", registered: 200, underRegistration: 50, flag: "https://flagcdn.com/w40/lb.png" },
+    LC: { name: "Saint Lucia", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/lc.png" },
+    LI: { name: "Liechtenstein", registered: 10, underRegistration: 2, flag: "https://flagcdn.com/w40/li.png" },
+    LK: { name: "Sri Lanka", registered: 700, underRegistration: 150, flag: "https://flagcdn.com/w40/lk.png" },
+    LR: { name: "Liberia", registered: 40, underRegistration: 10, flag: "https://flagcdn.com/w40/lr.png" },
+    LS: { name: "Lesotho", registered: 30, underRegistration: 10, flag: "https://flagcdn.com/w40/ls.png" },
+    LT: { name: "Lithuania", registered: 200, underRegistration: 40, flag: "https://flagcdn.com/w40/lt.png" },
+    LU: { name: "Luxembourg", registered: 100, underRegistration: 20, flag: "https://flagcdn.com/w40/lu.png" },
+    LV: { name: "Latvia", registered: 150, underRegistration: 30, flag: "https://flagcdn.com/w40/lv.png" },
+    LY: { name: "Libya", registered: 80, underRegistration: 25, flag: "https://flagcdn.com/w40/ly.png" },
+    MA: { name: "Morocco", registered: 500, underRegistration: 100, flag: "https://flagcdn.com/w40/ma.png" },
+    MC: { name: "Monaco", registered: 30, underRegistration: 5, flag: "https://flagcdn.com/w40/mc.png" },
+    MD: { name: "Moldova", registered: 90, underRegistration: 20, flag: "https://flagcdn.com/w40/md.png" },
+    ME: { name: "Montenegro", registered: 40, underRegistration: 10, flag: "https://flagcdn.com/w40/me.png" },
+    MG: { name: "Madagascar", registered: 100, underRegistration: 25, flag: "https://flagcdn.com/w40/mg.png" },
+    MH: { name: "Marshall Islands", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/mh.png" },
+    MK: { name: "North Macedonia", registered: 150, underRegistration: 40, flag: "https://flagcdn.com/w40/mk.png" },
+    ML: { name: "Mali", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/ml.png" },
+    MM: { name: "Myanmar", registered: 300, underRegistration: 60, flag: "https://flagcdn.com/w40/mm.png" },
+    MN: { name: "Mongolia", registered: 80, underRegistration: 25, flag: "https://flagcdn.com/w40/mn.png" },
+    MR: { name: "Mauritania", registered: 50, underRegistration: 15, flag: "https://flagcdn.com/w40/mr.png" },
+    MT: { name: "Malta", registered: 120, underRegistration: 30, flag: "https://flagcdn.com/w40/mt.png" },
+    MU: { name: "Mauritius", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/mu.png" },
+    MV: { name: "Maldives", registered: 70, underRegistration: 25, flag: "https://flagcdn.com/w40/mv.png" },
+    MW: { name: "Malawi", registered: 60, underRegistration: 15, flag: "https://flagcdn.com/w40/mw.png" },
+    MX: { name: "Mexico", registered: 100, underRegistration: 200, flag: "https://flagcdn.com/w40/mx.png" },
+    MY: { name: "Malaysia", registered: 10, underRegistration: 300, flag: "https://flagcdn.com/w40/my.png" },
+    MZ: { name: "Mozambique", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/mz.png" },
+    NA: { name: "Namibia", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/na.png" },
+    NE: { name: "Niger", registered: 50, underRegistration: 15, flag: "https://flagcdn.com/w40/ne.png" },
+    NG: { name: "Nigeria", registered: 80, underRegistration: 200, flag: "https://flagcdn.com/w40/ng.png" },
+    NI: { name: "Nicaragua", registered: 10, underRegistration: 30, flag: "https://flagcdn.com/w40/ni.png" },
+    NL: { name: "Netherlands", registered: 14, underRegistration: 300, flag: "https://flagcdn.com/w40/nl.png" },
+    NO: { name: "Norway", registered: 600, underRegistration: 120, flag: "https://flagcdn.com/w40/no.png" },
+    NP: { name: "Nepal", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/np.png" },
+    NR: { name: "Nauru", registered: 10, underRegistration: 2, flag: "https://flagcdn.com/w40/nr.png" },
+    NU: { name: "Niue", registered: 5, underRegistration: 1, flag: "https://flagcdn.com/w40/nu.png" },
+    NZ: { name: "New Zealand", registered: 800, underRegistration: 150, flag: "https://flagcdn.com/w40/nz.png" },
+    OM: { name: "Oman", registered: 150, underRegistration: 30, flag: "https://flagcdn.com/w40/om.png" },
+    PA: { name: "Panama", registered: 200, underRegistration: 50, flag: "https://flagcdn.com/w40/pa.png" },
+    PE: { name: "Peru", registered: 700, underRegistration: 150, flag: "https://flagcdn.com/w40/pe.png" },
+    PG: { name: "Papua New Guinea", registered: 80, underRegistration: 20, flag: "https://flagcdn.com/w40/pg.png" },
+    PH: { name: "Philippines", registered: 150, underRegistration: 300, flag: "https://flagcdn.com/w40/ph.png" },
+    PK: { name: "Pakistan", registered: 19, underRegistration: 500, flag: "https://flagcdn.com/w40/pk.png" },
+    PL: { name: "Poland", registered: 100, underRegistration: 250, flag: "https://flagcdn.com/w40/pl.png" },
+    PT: { name: "Portugal", registered: 800, underRegistration: 150, flag: "https://flagcdn.com/w40/pt.png" },
+    PW: { name: "Palau", registered: 10, underRegistration: 2, flag: "https://flagcdn.com/w40/pw.png" },
+    PY: { name: "Paraguay", registered: 100, underRegistration: 25, flag: "https://flagcdn.com/w40/py.png" },
+    QA: { name: "Qatar", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/qa.png" },
+    RO: { name: "Romania", registered: 700, underRegistration: 150, flag: "https://flagcdn.com/w40/ro.png" },
+    RS: { name: "Serbia", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/rs.png" },
+    RU: { name: "Russia", registered: 200, underRegistration: 500, flag: "https://flagcdn.com/w40/ru.png" },
+    RW: { name: "Rwanda", registered: 100, underRegistration: 25, flag: "https://flagcdn.com/w40/rw.png" },
+    SA: { name: "Saudi Arabia", registered: 100, underRegistration: 300, flag: "https://flagcdn.com/w40/sa.png" },
+    SB: { name: "Solomon Islands", registered: 50, underRegistration: 15, flag: "https://flagcdn.com/w40/sb.png" },
+    SC: { name: "Seychelles", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/sc.png" },
+    SD: { name: "Sudan", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/sd.png" },
+    SE: { name: "Sweden", registered: 800, underRegistration: 150, flag: "https://flagcdn.com/w40/se.png" },
+    SG: { name: "Singapore", registered: 900, underRegistration: 200, flag: "https://flagcdn.com/w40/sg.png" },
+    SI: { name: "Slovenia", registered: 300, underRegistration: 60, flag: "https://flagcdn.com/w40/si.png" },
+    SK: { name: "Slovakia", registered: 500, underRegistration: 100, flag: "https://flagcdn.com/w40/sk.png" },
+    SL: { name: "Sierra Leone", registered: 50, underRegistration: 15, flag: "https://flagcdn.com/w40/sl.png" },
+    SM: { name: "San Marino", registered: 10, underRegistration: 2, flag: "https://flagcdn.com/w40/sm.png" },
+    SN: { name: "Senegal", registered: 100, underRegistration: 25, flag: "https://flagcdn.com/w40/sn.png" },
+    SO: { name: "Somalia", registered: 50, underRegistration: 10, flag: "https://flagcdn.com/w40/so.png" },
+    SR: { name: "Suriname", registered: 40, underRegistration: 10, flag: "https://flagcdn.com/w40/sr.png" },
+    ST: { name: "São Tomé and Príncipe", registered: 10, underRegistration: 2, flag: "https://flagcdn.com/w40/st.png" },
+    SV: { name: "El Salvador", registered: 200, underRegistration: 50, flag: "https://flagcdn.com/w40/sv.png" },
+    SY: { name: "Syria", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/sy.png" },
+    SZ: { name: "Eswatini", registered: 50, underRegistration: 10, flag: "https://flagcdn.com/w40/sz.png" },
+    TD: { name: "Chad", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/td.png" },
+    TG: { name: "Togo", registered: 80, underRegistration: 20, flag: "https://flagcdn.com/w40/tg.png" },
+    TH: { name: "Thailand", registered: 120, underRegistration: 300, flag: "https://flagcdn.com/w40/th.png" },
+    TJ: { name: "Tajikistan", registered: 70, underRegistration: 20, flag: "https://flagcdn.com/w40/tj.png" },
+    TL: { name: "Timor-Leste", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/tl.png" },
+    TM: { name: "Turkmenistan", registered: 90, underRegistration: 20, flag: "https://flagcdn.com/w40/tm.png" },
+    TN: { name: "Tunisia", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/tn.png" },
+    TO: { name: "Tonga", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/to.png" },
+    TR: { name: "Turkey", registered: 1800, underRegistration: 400, flag: "https://flagcdn.com/w40/tr.png" },
+    TT: { name: "Trinidad and Tobago", registered: 100, underRegistration: 25, flag: "https://flagcdn.com/w40/tt.png" },
+    TV: { name: "Tuvalu", registered: 10, underRegistration: 2, flag: "https://flagcdn.com/w40/tv.png" },
+    TZ: { name: "Tanzania", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/tz.png" },
+    UA: { name: "Ukraine", registered: 1200, underRegistration: 300, flag: "https://flagcdn.com/w40/ua.png" },
+    UG: { name: "Uganda", registered: 500, underRegistration: 120, flag: "https://flagcdn.com/w40/ug.png" },
+    US: { name: "United States", registered: 90, underRegistration: 200, flag: "https://flagcdn.com/w40/us.png" },
+    UY: { name: "Uruguay", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/uy.png" },
+    UZ: { name: "Uzbekistan", registered: 500, underRegistration: 100, flag: "https://flagcdn.com/w40/uz.png" },
+    VC: { name: "Saint Vincent and the Grenadines", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/vc.png" },
+    VE: { name: "Venezuela", registered: 700, underRegistration: 150, flag: "https://flagcdn.com/w40/ve.png" },
+    VN: { name: "Vietnam", registered: 2000, underRegistration: 500, flag: "https://flagcdn.com/w40/vn.png" },
+    VU: { name: "Vanuatu", registered: 20, underRegistration: 5, flag: "https://flagcdn.com/w40/vu.png" },
+    WS: { name: "Samoa", registered: 30, underRegistration: 10, flag: "https://flagcdn.com/w40/ws.png" },
+    YE: { name: "Yemen", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/ye.png" },
+    ZA: { name: "South Africa", registered: 100, underRegistration: 250, flag: "https://flagcdn.com/w40/za.png" },
+    ZM: { name: "Zambia", registered: 300, underRegistration: 70, flag: "https://flagcdn.com/w40/zm.png" },
+    ZW: { name: "Zimbabwe", registered: 200, underRegistration: 50, flag: "https://flagcdn.com/w40/zw.png" },
+  };
+
+  // Create main polygon series for countries
+  var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+    geoJSON: am5geodata_worldLow
+  }));
+
+  // Default settings for polygons
+  polygonSeries.mapPolygons.template.setAll({
+    tooltipText: "",
+    toggleKey: "active",
+    interactive: true,
+    stroke: am5.color(0x000000), // Default black border
+    strokeWidth: 1, // Default border width
+    strokeOpacity: 0.8 // Border opacity
+  });
+
+  // Hover state for polygons
+  polygonSeries.mapPolygons.template.states.create("hover", {
+    stroke: am5.color(0xffd700), // Gold color for hover
+    strokeWidth: 2 // Thicker border on hover
+  });
+
+  // Active state for polygons
+  polygonSeries.mapPolygons.template.states.create("active", {
+    stroke: am5.color(0xff4500), // Orange-red color for active
+    strokeWidth: 3 // Even thicker border for active
+  });
+
+  // Set country colors based on data
+  polygonSeries.mapPolygons.template.adapters.add("fill", function(fill, target) {
+    var id = target.dataItem.get("id");
+    var data = countryData[id];
+    if (id === "AQ") {
+      return am5.color(0xffffff); // White color for Antarctica
+    }
+    if (data) {
+      var value = data.registered; // Use 'registered' for gradient
+      if (value > 1800) {
+        return am5.color(0x54649c); // Dark Blue
+      } else if (value > 1600) {
+        return am5.color(0x545f84); // Gray Blue
+      } else if (value > 1400) {
+        return am5.color(0x8c7269); // Brown
+      } else if (value > 1200) {
+        return am5.color(0x644e52); // Dark Brown
+      } else if (value > 1000) {
+        return am5.color(0xc9bd96); // Light Beige
+      } else if (value > 800) {
+        return am5.color(0xbabc71); // Yellow-Green
+      } else if (value > 600) {
+        return am5.color(0x728c52); // Green
+      } else if (value > 400) {
+        return am5.color(0x845c42); // Brown
+      } else if (value > 200) {
+        return am5.color(0xbe887e); // Soft Red
+      } else if (value > 100) {
+        return am5.color(0xabb8c2); // Soft Blue
+      } else {
+        return am5.color(0x3a8183); // Teal
+      }
+    }
+    return fill;
+  });
+
+  // Adjust tooltips dynamically
+  polygonSeries.mapPolygons.template.adapters.add("tooltipHTML", function(_, target) {
+    var id = target.dataItem.get("id");
+    var data = countryData[id];
+    if (data) {
+      return `
+        <div style='text-align: center; background-color: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); font-family: Arial, sans-serif; font-size: 12px; color: black;'>
+          <strong style='font-size: 14px;'>${data.name}</strong><br>
+          <img src='${data.flag}' alt='flag' style='width: 30px; height: 20px; margin-top: 5px;'><br>
+          <div style='margin-top: 5px;'>
+            No. of Registered Products: <strong>${data.registered}</strong><br>
+            No. of Under Registration Products: <strong>${data.underRegistration}</strong>
+          </div>
+        </div>`;
+    }
+    return "<div style='background-color: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); font-family: Arial, sans-serif; color: black;'>No data available</div>";
+  });
+
+  // Adjust interactivity
+  polygonSeries.mapPolygons.template.adapters.add("interactive", function(interactive, target) {
+    var id = target.dataItem.get("id");
+    return id !== "AQ"; // Make Antarctica non-interactive
+  });
+
+  // Smooth rotation and centering on active country
+  polygonSeries.mapPolygons.template.events.on("active", function(active, target) {
+    if (target.get("active")) {
+      selectCountry(target.dataItem.get("id"));
+    } else {
+      chart.set("panBehavior", "rotateLongLat");
+    }
+  });
+
+// Add click event to navigate to country-specific page
+polygonSeries.mapPolygons.template.events.on("click", function(ev) {
+  var id = ev.target.dataItem.get("id"); // Get the country ID
+  if (id) {
+    var countryName = getCountryFileName(id); // Map ID to file name
+    if (countryName) {
+      window.location.href = `${countryName}.html`; // Redirect to the HTML file
+    } else {
+      console.error(`No file mapping found for country ID: ${id}`);
+    }
+  }
+});
+
+// Helper function to map country ID to file names
+function getCountryFileName(id) {
+  // Map of country IDs to file names
+  const countryFileMap = {
+    IN: "india", // India
+    US: "united-states", // United States
+    CN: "china", // China
+    FR: "france", // France
+    // Add other country mappings as needed
+  };
+
+  return countryFileMap[id] || null; // Return mapped file name or null
+}
+
+  function selectCountry(id) {
+    var dataItem = polygonSeries.getDataItemById(id);
+    var target = dataItem.get("mapPolygon");
+    if (target) {
+      var centroid = target.geoCentroid();
+      if (centroid) {
+        chart.set("panBehavior", "none");
+        chart.animate({ key: "rotationX", to: -centroid.longitude, duration: 1500, easing: am5.ease.inOut(am5.ease.cubic) });
+        chart.animate({ key: "rotationY", to: -centroid.latitude, duration: 1500, easing: am5.ease.inOut(am5.ease.cubic) }).events.on("animationended", function() {
+          chart.set("panBehavior", "rotateLongLat");
+        });
+      }
+    }
+  }
+
+  // Make stuff animate on load
+  chart.appear(1000, 100);
+
+}); // end am5.ready()
+</script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>
