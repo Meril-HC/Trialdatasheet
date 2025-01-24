@@ -1,4 +1,3 @@
-<script>
 am5.ready(function () {
   // Create root
   var root = am5.Root.new("piechartdiv");
@@ -228,4 +227,3 @@ am5.ready(function () {
   series.data.setAll(data.all.continents);
   updateCharts();
 });
-</script>
