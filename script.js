@@ -1,4 +1,3 @@
-<script>
     // ------------------------------------------
     // Table Functionality
     // ------------------------------------------
@@ -142,4 +141,3 @@
     // Initial Setup
     populateDropdown(productSelect, products.mixed);
     updateTable(generateData(products.mixed));
-</script>
