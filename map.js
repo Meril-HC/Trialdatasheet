@@ -427,6 +427,3 @@ function getCountryFileName(id) {
   chart.appear(1000, 100);
 
 }); // end am5.ready()
-
-<!-- HTML -->
-<div id="chartdiv"></div>
