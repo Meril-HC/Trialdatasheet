@@ -17,7 +17,6 @@
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 </head>
 <body>
-
     <!-- Blue Header -->
     <div class="blue-header">
         <select>
@@ -53,6 +52,31 @@
         <button class="tab-button active" data-tab="table">Table</button>
         <button class="tab-button" data-tab="graph">Graph</button>
         <button class="tab-button" data-tab="map">Map</button>
+    </div>
+
+    <!-- Dropdown and Export Section -->
+    <div id="dropdown-section" class="dropdown-section">
+        <select id="company-select">
+            <option value="mixed">Select Company</option>
+            <option value="healthcare">Meril Healthcare</option>
+            <option value="endo">Meril Endo-surgery</option>
+            <option value="life-sciences">Meril Life Sciences</option>
+        </select>
+        <select id="product-select">
+            <option>Select Product</option>
+        </select>
+        <select id="country-select">
+            <option>Select Country</option>
+            <option value="USA">USA</option>
+            <option value="Germany">Germany</option>
+            <option value="India">India</option>
+            <option value="Canada">Canada</option>
+            <option value="Japan">Japan</option>
+        </select>
+        <div class="export-buttons">
+            <button onclick="alert('Export to Excel coming soon!')">Export to Excel</button>
+            <button onclick="alert('Export to Word coming soon!')">Export to Word</button>
+        </div>
     </div>
 
     <!-- Tab Contents -->
