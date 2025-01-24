@@ -19,8 +19,6 @@ am5.ready(function() {
     paddingRight: 20
   }));
 
-// Define the auto-rotation animation
-let autoRotate;
 
 function startAutoRotation() {
     autoRotate = chart.animate({
@@ -285,10 +283,6 @@ var backgroundSeries = chart.series.unshift(
     ZW: { name: "Zimbabwe", registered: 200, underRegistration: 50, flag: "https://flagcdn.com/w40/zw.png" },
   };
 
-  // Create main polygon series for countries
-  var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
-    geoJSON: am5geodata_worldLow
-  }));
 
   // Default settings for polygons
   polygonSeries.mapPolygons.template.setAll({
@@ -427,4 +421,3 @@ function getCountryFileName(id) {
   chart.appear(1000, 100);
 
 }); // end am5.ready()
-</script>
