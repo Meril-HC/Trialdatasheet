@@ -1,4 +1,3 @@
-<script>
         am5.ready(function () {
             // Data for all continents and their respective countries
             const companyData = {
@@ -212,4 +211,3 @@
             series.appear(1000);
             chart.appear(1000, 100);
         });
-    </script>
