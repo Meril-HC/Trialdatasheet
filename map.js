@@ -19,42 +19,6 @@ am5.ready(function() {
     paddingRight: 20
   }));
 
-// Define the auto-rotation animation
-let autoRotate;
-
-function startAutoRotation() {
-    autoRotate = chart.animate({
-        key: "rotationX",
-        to: chart.get("rotationX") + 360, // Continue rotation from current position
-        duration: 10000, // 30 seconds for a full rotation
-        loops: Infinity, // Infinite loops
-        easing: am5.ease.linear // Smooth, constant speed
-    });
-}
-
-function stopAutoRotation() {
-    if (autoRotate) {
-        autoRotate.stop(); // Stop the animation
-        autoRotate = null;
-    }
-}
-
-// Attach mouse events to control auto-rotation
-chart.chartContainer.events.on("pointerover", function() {
-    stopAutoRotation(); // Stop rotation when the mouse is over the globe
-});
-
-chart.chartContainer.events.on("pointerout", function() {
-    startAutoRotation(); // Start rotation when the mouse leaves the globe
-});
-
-// Start auto-rotation by default
-startAutoRotation();
-
-  // Enable globe rotation on drag
-  chart.set("wheelX", "rotateX");
-  chart.set("wheelY", "rotateY");
-  chart.set("panBehavior", "rotateLongLat");
   
   // Create main polygon series for countries
 var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
