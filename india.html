@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .details-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .map-container {
+            flex: 0 0 150px;
+        }
+
+        .flag-title-container {
+            text-align: center;
+            flex: 1;
+        }
+
+        .flag {
+            width: 150px;
+            height: auto;
+            display: inline-block;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .country-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .country-photo {
+            width: 200%;
+            max-width: 250px;
+            height: auto;
+            display: block;
+            margin: auto;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            gap: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+            flex: 1;
+            padding: 20px;
+            background-color: #e7f1fb;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-box h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .stat-box .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .dropdown-section {
+            padding: 15px;
+            background-color: #e7f1fb;
+            border: 1px solid #ccc;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dropdown-section select {
+            padding: 10px;
+            font-size: 14px;
+            border: 2px solid #5da4e5;
+            border-radius: 5px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            width: 250px;
+        }
+
+        .download-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .download-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #e8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table th,
+        table td {
+            padding: 10px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #2db9c3;
+            color: white;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        table td {
+            font-size: 13px;
+            color: #333;
+        }
+
+        table tbody tr:hover {
+            background-color: #cceef1;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: flex-end; /* Align to the left */
+            margin-top: 20px;
+            gap: 5px;
+        }
+
+        .pagination button {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            background-color: #e8f9fa; /* Match table color */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .pagination button.active {
+            background-color: #2db9c3;
+            color: white;
+            border: 1px solid #2db9c3;
+        }
+
+        .pagination button:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="details-container">
+        <div class="header">
+            <!-- Map Section -->
+            <div class="map-container">
+                <img src="https://mapsforupsc.com/wp-content/uploads/2024/02/Outline-Map-of-India-with-States.png" class="country-photo" alt="India Map">
+            </div>
+
+            <!-- Flag and Title Section -->
+            <div class="flag-title-container">
+                <img src="https://oec.world/images/icons/country/country_ind.png" class="flag" alt="India Flag">
+                <div class="country-title">India</div>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-box">
+                <h3>No. of Registered Products</h3>
+                <div class="value" id="registered-count">1700</div>
+            </div>
+            <div class="stat-box">
+                <h3>No. of Under Registration</h3>
+                <div class="value" id="under-registration-count">600</div>
+            </div>
+        </div>
+
+        <div class="dropdown-section">
+            <select id="company-dropdown" onchange="resetProductDropdown(); updateData();">
+                <option value="" selected>Select Company</option>
+                <option value="meril-healthcare">Meril Healthcare</option>
+                <option value="meril-endo-surgery">Meril Endo-surgery</option>
+                <option value="meril-life-sciences">Meril Life-Sciences</option>
+            </select>
+
+            <select id="product-dropdown" onchange="updateData()">
+                <option value="" selected>Select Product</option>
+            </select>
+        </div>
+
+        <div class="download-container">
+            <a href="registration-certificate.zip" class="download-button" download>Download Registration Certificate</a>
+        </div>
+
+        <div id="product-table-container"></div>
+        <div class="pagination" id="pagination-container"></div>
+    </div>
+
+    <script>
+        const products = {
+            "meril-healthcare": [
+                "Destiknee™ Total Knee System",
+                "Opulent™ Total Knee System",
+                "Freedom® Total Knee System",
+                "Latitud™ Hip Replacement System",
+                "Libertas™ Hip Replacement System",
+                "ARTIS™/ARMAR™/DHUM™/KET™ - Non Sterile Bone Plates",
+                "MBOSS™/FIXION™/DHUM™/KET™ - Non Sterile Bone Screws",
+                "ACCURA™/CLAVO™/KET™ - Sterile & Non sterile IM Nails",
+                "Arthroscopy Knee System",
+                "Arthroscopy Shoulder System",
+                "Primis Shoulder System",
+                "Reusable Arthroscopy Knee Instrumnets Set",
+                "Reusable Arthroscopy Shoulder Instrumnets Set"
+            ],
+            "meril-endo-surgery": [
+                "Mitsu AB",
+                "Filasilk",
+                "Filaprop",
+                "Circular Stapler",
+                "Hemorrhoids Stapler",
+                "Endocutter"
+            ],
+            "meril-life-sciences": ["Biomine"]
+        };
+
+        const underRegistration = [
+            "Arthroscopy Knee System",
+            "Arthroscopy Shoulder System",
+            "Primis Shoulder System",
+            "Reusable Arthroscopy Knee Instrumnets Set",
+            "Reusable Arthroscopy Shoulder Instrumnets Set"
+        ];
+
+        const rowsPerPage = 15;
+        let currentPage = 1;
+
+        function resetProductDropdown() {
+            const productDropdown = document.getElementById("product-dropdown");
+            productDropdown.innerHTML = '<option value="" selected>Select Product</option>';
+        }
+
+        function updateData() {
+            const companyDropdown = document.getElementById("company-dropdown");
+            const productDropdown = document.getElementById("product-dropdown");
+            const registeredCount = document.getElementById("registered-count");
+            const underRegistrationCount = document.getElementById("under-registration-count");
+
+            const selectedCompany = companyDropdown.value;
+            const selectedProduct = productDropdown.value;
+
+            let filteredProducts = [];
+
+            if (selectedCompany) {
+                products[selectedCompany].forEach(product => {
+                    if (![...productDropdown.options].some(option => option.value === product)) {
+                        const option = document.createElement("option");
+                        option.value = product;
+                        option.textContent = product;
+                        productDropdown.appendChild(option);
+                    }
+                });
+                filteredProducts = selectedProduct
+                    ? [selectedProduct]
+                    : products[selectedCompany];
+
+                const registered = filteredProducts.filter(
+                    product => !underRegistration.includes(product)
+                );
+                const underReg = filteredProducts.filter(product =>
+                    underRegistration.includes(product)
+                );
+
+                registeredCount.textContent = registered.length;
+                underRegistrationCount.textContent = underReg.length;
+            } else {
+                registeredCount.textContent = 1700;
+                underRegistrationCount.textContent = 600;
+                filteredProducts = Object.values(products).flat();
+            }
+
+            generateProductTable(filteredProducts);
+            generatePagination(filteredProducts.length);
+        }
+
+        function generateProductTable(productList) {
+            const productTableContainer = document.getElementById("product-table-container");
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            productList.slice(startIndex, endIndex).forEach(product => {
+                const status = underRegistration.includes(product)
+                    ? "Under Registration"
+                    : "Registered";
+                tableHTML += `
+                    <tr>
+                        <td>${product}</td>
+                        <td>${status}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            productTableContainer.innerHTML = tableHTML;
+        }
+
+        function generatePagination(totalRows) {
+            const paginationContainer = document.getElementById("pagination-container");
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+            let paginationHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `
+                    <button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>
+                `;
+            }
+
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        function changePage(pageNumber) {
+            currentPage = pageNumber;
+            updateData();
+        }
+
+        // Initial load with default data
+        updateData();
+    </script>
+</body>
+</html>
