@@ -112,6 +112,16 @@
             width: 250px;
         }
 
+        .details-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
         .download-container {
             text-align: center;
             margin: 20px 0;
@@ -127,8 +137,91 @@
             font-weight: bold;
         }
 
-        .download-button:hover {
-            background-color: #0056b3;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            width: 400px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .otp-input-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+
+        .modal .button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal .button:hover {
+            background-color: #530a9b;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .resend {
+            margin-top: 12px;
+            font-size: 16px;
+            color: black;
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .email-input {
+            width: 90%;
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: none;
+            font-weight: bold;
+        }
+        
+        .resend:hover {
+            text-decoration: underline;
         }
 
         table {
@@ -233,10 +326,36 @@
                 <option value="" selected>Select Product</option>
             </select>
         </div>
+        <div class="details-container">
+        <button class="download-button" id="open-modal">Download Registration Certificate</button>
+    </div>
 
-        <div class="download-container">
-            <a href="registration-certificate.zip" class="download-button" download>Download Registration Certificate</a>
+    <!-- OTP Modal -->
+    
+    <div id="otp-modal" class="modal">
+        <div class="modal-content">
+            <h2>Verify Your Account</h2>
+            <input type="email" id="email" class="email-input" placeholder="Enter your email">
+            <p class="error-message" id="email-error">Please enter email address.</p>
+            <p class="error-message" id="email-domain-error">This mail id is not associated with Meril Group of companies.</p>
+            <p class="email-message" id="email-message"></p>
+            <button class="button" id="send-otp">Send OTP</button>
+            <div id="otp-section" style="display: none;">
+                <p>Please Verify the Six Digit Code.</p>
+                <div class="otp-input-container">
+                    <input type="text" maxlength="1" class="otp-input">
+                    <input type="text" maxlength="1" class="otp-input">
+                    <input type="text" maxlength="1" class="otp-input">
+                    <input type="text" maxlength="1" class="otp-input">
+                    <input type="text" maxlength="1" class="otp-input">
+                    <input type="text" maxlength="1" class="otp-input">
+                </div>
+                <p class="error-message" id="otp-error">Please enter a valid OTP</p>
+                <button class="button" id="verify-otp">Verify</button>
+                <p class="resend" id="resend-otp"><span style="color: black;">Didn't receive OTP?</span> <span class="resend">RESEND</span></p>
+            </div>
         </div>
+    </div>
 
         <div id="product-table-container"></div>
         <div class="pagination" id="pagination-container"></div>
@@ -386,6 +505,95 @@
 
         // Initial load with default data
         updateData();
+    </script>
+    
+<script>
+        let otpSent = false;
+
+        // Open modal
+        document.getElementById("open-modal").addEventListener("click", () => {
+            document.getElementById("otp-modal").style.display = "flex";
+        });
+
+        // Send OTP
+        document.getElementById("send-otp").addEventListener("click", () => {
+    const email = document.getElementById("email").value.trim();
+    const emailError = document.getElementById("email-error");
+    const emailDomainError = document.getElementById("email-domain-error");
+    const emailMessage = document.getElementById("email-message");
+    const sendOtpButton = document.getElementById("send-otp");
+
+    if (!email) {
+        emailError.style.display = "block";
+        emailError.innerText = "Please enter a valid email address.";
+        emailDomainError.style.display = "none";
+        return;
+    }
+            
+            emailError.style.display = "none";
+            
+            if (!email.endsWith("@merillife.com")) {
+                emailDomainError.style.display = "block";
+                return;
+            }
+
+            emailDomainError.style.display = "none";
+            otpSent = true;
+            
+            let maskedEmail = email.replace(/(.{2}).+(@.+)/, "$1****$2");
+            emailMessage.innerHTML = `We have sent a code to your email <strong>${maskedEmail}</strong>`;
+            emailMessage.style.display = "block";
+            document.getElementById("email").style.display = "none";
+            sendOtpButton.style.display = "none";
+            document.getElementById("otp-section").style.display = "block";
+        });
+
+        // Resend OTP
+        document.getElementById("resend-otp").addEventListener("click", () => {
+            if (!otpSent) {
+                alert("Please enter a valid email and click 'Send OTP' first.");
+                return;
+            }
+            alert("OTP resent to your email.");
+        });
+
+        // OTP auto-focus and backspace navigation
+        document.querySelectorAll(".otp-input").forEach((input, index, inputs) => {
+            input.addEventListener("input", () => {
+                if (input.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+            
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace" && input.value.length === 0 && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Verify OTP
+        document.getElementById("verify-otp").addEventListener("click", () => {
+            let otp = "";
+            let isValid = true;
+            const otpError = document.getElementById("otp-error");
+            
+            document.querySelectorAll(".otp-input").forEach(input => {
+                if (!/^[0-9]$/.test(input.value)) {
+                    isValid = false;
+                }
+                otp += input.value;
+            });
+
+            if (!isValid || otp.length < 6) {
+                otpError.style.display = "block";
+                return;
+            }
+
+            otpError.style.display = "none";
+            alert("OTP Verified! Downloading Certificate...");
+            window.location.href = "registration-certificate.zip";
+        });
     </script>
 </body>
 </html>
